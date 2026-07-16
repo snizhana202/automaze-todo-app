@@ -6,6 +6,8 @@ class TaskBase(BaseModel):
     description: Optional[str] = None
     is_completed: bool = False
     priority: int = Field(default=5, ge=1, le=10)
+    due_date: Optional[str] = None
+    category: Optional[str] = None
 
 class TaskCreate(TaskBase):
     pass
@@ -15,6 +17,8 @@ class TaskUpdate(BaseModel):
     description: Optional[str] = None
     is_completed: Optional[bool] = None
     priority: Optional[int] = Field(None, ge=1, le=10)
+    due_date: Optional[str] = None
+    category: Optional[str] = None
 
 class TaskResponse(TaskBase):
     id: int

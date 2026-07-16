@@ -9,3 +9,5 @@ class Task(Base):
     description = Column(String, nullable=True)
     is_completed = Column(Boolean, default=False)
     priority = Column(Integer, default=5)
+    due_date = Column(String, nullable=True)
+    category = Column(String, nullable=True)
