@@ -12,7 +12,7 @@ A fullstack task management application featuring a reactive frontend and a robu
 * **Validation:** Zod
 * **Deployment:** Vercel (Frontend) & Render (Backend)
 
-### 🏗 Project Structure
+## 🏗 Project Structure
 
 * `/frontend`: Next.js application with Optimistic UI and modular state management.
 * `/backend`: Python-based API handling data persistence and security.
@@ -31,7 +31,7 @@ A fullstack task management application featuring a reactive frontend and a robu
     * Frontend: Navigate to `cd frontend` and run `npm install`.
     * Backend: Navigate to `cd backend` and run `pip install -r requirements.txt`.
 3. **Env:** 
-    * Backend: Create a `.env` file in the `/backend` folder and add: `DATABASE_URL=sqlite:///./todo.db`
+    * Backend: Create a `.env` file in the `/backend` folder and set `DATABASE_URL`
     * Frontend: Create a `.env.local` file in the `/frontend` folder and set `NEXT_PUBLIC_API_URL`
 4. **Run:** 
     * Backend: Start the server using `uvicorn main:app --reload`.
