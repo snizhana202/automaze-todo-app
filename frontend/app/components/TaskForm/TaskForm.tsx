@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button, Input, Textarea, Select, Label } from "../UI/UI";
 import { Plus, Zap } from "lucide-react";
-import { validateTask } from "@/app/utils/validation";
+import { TaskSchema } from "@/app/utils/validation";
 import { DatePicker } from "../DatePicker/DatePicker";
 import { TaskFormProps } from "@/app/types/types";
 
@@ -19,19 +19,22 @@ export function TaskForm({ onAdd, isSubmitting }: TaskFormProps) {
     e.preventDefault();
     setError(null);
 
-    const validationError = validateTask(title, description);
-    if (validationError) {
-      setError(validationError);
+    const formData = {
+      title,
+      description: description.trim() === "" ? null : description, // Якщо порожньо, передаємо null
+      priority,
+      dueDate: dueDate || null,
+      category: category !== "None" ? category : null,
+    };
+
+    const result = TaskSchema.safeParse(formData);
+
+    if (!result.success) {
+      setError(result.error.issues[0].message);
       return;
     }
 
-    await onAdd(
-      title.trim(),
-      description.trim(),
-      priority,
-      dueDate ? dueDate : null,
-      category !== "None" ? category : null,
-    );
+    await onAdd(result.data);
 
     setTitle("");
     setDescription("");

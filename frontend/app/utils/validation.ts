@@ -1,24 +1,23 @@
-export const validateTask = (
-  title: string,
-  description: string,
-): string | null => {
-  const cleanTitle = title.trim();
-  const cleanDescription = description.trim();
+import { z } from "zod";
 
-  if (!cleanTitle) return "Task title cannot be empty or contain only spaces.";
+export const TaskSchema = z.object({
+  title: z
+    .string()
+    .trim()
+    .min(1, "Title cannot be empty.")
+    .regex(/[a-zA-Z]/, "Title must contain at least one English letter.")
+    .regex(/^[a-zA-Z0-9\s.,!?'"\-()]*$/, "Please use English letters only."),
+  description: z
+    .string()
+    .trim()
+    .nullable()
+    .optional()
+    .refine((val) => !val || /[a-zA-Z0-9]/.test(val), {
+      message: "Description cannot consist only of special characters.",
+    }),
+  priority: z.number().min(1).max(10),
+  dueDate: z.string().nullable().optional(),
+  category: z.string().nullable().optional(),
+});
 
-  if (!/[a-zA-Z]/.test(cleanTitle)) {
-    return "Task title must contain at least one English letter.";
-  }
-
-  const englishRegex = /^[a-zA-Z0-9\s.,!?'"\-()]*$/;
-  if (!englishRegex.test(cleanTitle)) {
-    return "Please use English letters only.";
-  }
-
-  if (cleanDescription.length > 0 && !/[a-zA-Z0-9]/.test(cleanDescription)) {
-    return "Description cannot consist only of special characters.";
-  }
-
-  return null;
-};
+export type TaskFormData = z.infer<typeof TaskSchema>;

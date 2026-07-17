@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { Task } from "../types/types";
 import { SortOption } from "@/app/components/TaskFilters/TaskFilters";
+import { TaskSchema, TaskFormData } from "@/app/utils/validation";
 
 export function useTasks() {
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -12,23 +13,6 @@ export function useTasks() {
   const [filter, setFilter] = useState<"all" | "active" | "completed">("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState<SortOption>("newest");
-
-  const refreshTasks = async () => {
-    if (!API_URL) {
-      console.error("Error: API_URL is not defined in environment variables");
-      return;
-    }
-
-    try {
-      const res = await fetch(API_URL);
-      if (res.ok) {
-        const data = await res.json();
-        setTasks(data);
-      }
-    } catch (err) {
-      console.error("Error loading tasks:", err);
-    }
-  };
 
   useEffect(() => {
     let isMounted = true;
@@ -62,66 +46,88 @@ export function useTasks() {
     };
   }, [API_URL]);
 
-  const addTask = async (
-    title: string,
-    description: string,
-    priority: number,
-    dueDate: string | null = null,
-    category: string | null = null,
-  ) => {
-    if (!API_URL) {
-      console.error("API_URL is not defined");
+  const addTask = async (data: TaskFormData) => {
+    const validationResult = TaskSchema.safeParse(data);
+    if (!validationResult.success) {
+      console.error("Validation failed:", validationResult.error.format());
       return;
     }
-    setIsSubmitting(true);
-    const payload = {
-      title,
-      description: description.trim() ? description : null,
-      priority,
+
+    if (!API_URL) return;
+
+    const tempTask: Task = {
+      id: Date.now(),
+      title: validationResult.data.title,
+      description: validationResult.data.description ?? null,
+      priority: validationResult.data.priority,
       is_completed: false,
-      due_date: dueDate,
-      category: category,
+      due_date: validationResult.data.dueDate ?? null,
+      category: validationResult.data.category ?? null,
     };
+
+    setTasks((prev) => [tempTask, ...prev]);
+    setIsSubmitting(true);
+
     try {
       const res = await fetch(API_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify(validationResult.data),
       });
-      if (res.ok) await refreshTasks();
+
+      if (!res.ok) throw new Error("Server error");
+
+      const savedTask = await res.json();
+      setTasks((prev) =>
+        prev.map((t) => (t.id === tempTask.id ? savedTask : t)),
+      );
     } catch (err) {
       console.error("Error creating task:", err);
+      setTasks((prev) => prev.filter((t) => t.id !== tempTask.id));
+      alert("Failed to add task.");
     } finally {
       setIsSubmitting(false);
     }
   };
 
   const toggleTask = async (task: Task) => {
-    const payload = { ...task, is_completed: !task.is_completed };
+    setTasks((prev) =>
+      prev.map((t) =>
+        t.id === task.id ? { ...t, is_completed: !t.is_completed } : t,
+      ),
+    );
+
     try {
       const res = await fetch(`${API_URL}/${task.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({ ...task, is_completed: !task.is_completed }),
       });
-      if (res.ok) {
-        setTasks((prev) =>
-          prev.map((t) =>
-            t.id === task.id ? { ...t, is_completed: !t.is_completed } : t,
-          ),
-        );
-      }
+
+      if (!res.ok) throw new Error("Failed to update");
     } catch (err) {
       console.error("Error updating task:", err);
+      setTasks((prev) =>
+        prev.map((t) =>
+          t.id === task.id ? { ...t, is_completed: task.is_completed } : t,
+        ),
+      );
     }
   };
 
   const deleteTask = async (id: number) => {
+    const taskToDelete = tasks.find((t) => t.id === id);
+
+    setTasks((prev) => prev.filter((t) => t.id !== id));
+
     try {
       const res = await fetch(`${API_URL}/${id}`, { method: "DELETE" });
-      if (res.ok) setTasks((prev) => prev.filter((t) => t.id !== id));
+      if (!res.ok) throw new Error("Failed to delete");
     } catch (err) {
       console.error("Error deleting task:", err);
+      if (taskToDelete) {
+        setTasks((prev) => [taskToDelete, ...prev]);
+      }
     }
   };
 
