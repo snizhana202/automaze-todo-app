@@ -8,6 +8,7 @@ class TaskBase(BaseModel):
     priority: int = Field(default=5, ge=1, le=10)
     due_date: Optional[str] = None
     category: Optional[str] = None
+    order: int = 0
 
 class TaskCreate(TaskBase):
     pass
@@ -19,6 +20,7 @@ class TaskUpdate(BaseModel):
     priority: Optional[int] = Field(None, ge=1, le=10)
     due_date: Optional[str] = None
     category: Optional[str] = None
+    order: Optional[int] = None
 
 class TaskResponse(TaskBase):
     id: int
