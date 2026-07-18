@@ -3,7 +3,12 @@ import { Button, Input, Textarea, Select, Label } from "../UI/UI";
 import { Plus, Zap } from "lucide-react";
 import { TaskSchema } from "@/app/utils/validation";
 import { DatePicker } from "../DatePicker/DatePicker";
-import { TaskFormProps } from "@/app/types/types";
+import { TaskFormData } from "@/app/utils/validation";
+
+interface TaskFormProps {
+  onAdd: (data: TaskFormData) => Promise<void>;
+  isSubmitting: boolean;
+}
 
 const CATEGORIES = ["None", "Work", "Personal", "Shopping", "Study", "Health"];
 
@@ -21,7 +26,7 @@ export function TaskForm({ onAdd, isSubmitting }: TaskFormProps) {
 
     const formData = {
       title,
-      description: description.trim() === "" ? null : description, // Якщо порожньо, передаємо null
+      description: description.trim() === "" ? null : description,
       priority,
       dueDate: dueDate || null,
       category: category !== "None" ? category : null,

@@ -1,7 +1,7 @@
 import { Input, Select } from "../UI/UI";
 import { ArrowUpDown, ArrowUp, ArrowDown, Search } from "lucide-react";
 
-export type SortOption = "newest" | "priority-asc" | "priority-desc";
+export type SortOption = "newest" | "oldest" | "priority-asc" | "priority-desc";
 
 interface TaskFiltersProps {
   searchQuery: string;
@@ -69,13 +69,13 @@ export function TaskFilters({
               value="priority-asc"
               className="bg-slate-900 text-slate-200"
             >
-              Priority (Low-High)
+              Priority (1-10)
             </option>
             <option
               value="priority-desc"
               className="bg-slate-900 text-slate-200"
             >
-              Priority (High-Low)
+              Priority (10-1)
             </option>
           </Select>
         </div>

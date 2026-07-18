@@ -3,9 +3,9 @@
 import { useTasks } from "./hooks/useTasks";
 import { TaskForm } from "@/app/components/TaskForm/TaskForm";
 import { TaskStats } from "@/app/components/TaskStats/TaskStats";
-import { TaskItem } from "@/app/components/TaskItem/TaskItem";
 import { Header } from "@/app/components/Header/Header";
 import { TaskFilters } from "@/app/components/TaskFilters/TaskFilters";
+import { TaskList } from "@/app/components/TaskList/TaskList";
 
 export default function TodoApp() {
   const {
@@ -23,6 +23,7 @@ export default function TodoApp() {
     addTask,
     toggleTask,
     deleteTask,
+    reorderTasks,
   } = useTasks();
 
   return (
@@ -46,22 +47,20 @@ export default function TodoApp() {
             setSortBy={setSortBy}
           />
 
-          <div className="flex-1 overflow-y-auto max-h-[420px] space-y-3">
-            {isLoading ? (
-              <p className="text-center py-20 text-slate-500">Loading...</p>
-            ) : tasks.length === 0 ? (
-              <p className="text-center py-20 text-slate-500">No tasks found</p>
-            ) : (
-              tasks.map((task) => (
-                <TaskItem
-                  key={task.id}
-                  task={task}
-                  onToggle={toggleTask}
-                  onDelete={deleteTask}
-                />
-              ))
-            )}
-          </div>
+          {isLoading ? (
+            <p className="text-center py-20 text-slate-500">Loading...</p>
+          ) : tasks.length === 0 ? (
+            <p className="text-center py-20 text-slate-500">No tasks found</p>
+          ) : (
+            <TaskList
+              tasks={tasks}
+              onToggle={toggleTask}
+              onDelete={deleteTask}
+              onReorder={reorderTasks}
+              currentSortBy={sortBy}
+              setSortBy={setSortBy}
+            />
+          )}
         </div>
       </div>
     </main>

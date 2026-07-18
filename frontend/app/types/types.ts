@@ -1,5 +1,3 @@
-import { TaskFormData } from "../utils/validation";
-
 export interface Task {
   id: number;
   title: string;
@@ -8,9 +6,5 @@ export interface Task {
   priority: number;
   due_date?: string | null;
   category?: string | null;
-}
-
-export interface TaskFormProps {
-  onAdd: (data: TaskFormData) => Promise<void>;
-  isSubmitting: boolean;
+  order: number;
 }

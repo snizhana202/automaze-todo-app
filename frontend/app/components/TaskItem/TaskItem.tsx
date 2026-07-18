@@ -1,13 +1,36 @@
 import { Task } from "@/app/types/types";
 import { Trash2, Calendar, Check } from "lucide-react";
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 
 interface TaskItemProps {
   task: Task;
   onToggle: (task: Task) => void;
   onDelete: (id: number) => void;
+  isDraggable?: boolean;
 }
 
-export function TaskItem({ task, onToggle, onDelete }: TaskItemProps) {
+export function TaskItem({
+  task,
+  onToggle,
+  onDelete,
+  isDraggable,
+}: TaskItemProps) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: task.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+  };
+
   const priorityColor =
     task.priority <= 3
       ? "bg-rose-500/10 text-rose-400 border-rose-500/20"
@@ -20,7 +43,11 @@ export function TaskItem({ task, onToggle, onDelete }: TaskItemProps) {
 
   return (
     <div
-      className={`task-card ${task.is_completed ? "task-card-completed" : "task-card-active"}`}
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...listeners}
+      className={`task-card ${isDraggable ? "cursor-grab active:cursor-grabbing" : "cursor-default"}`}
     >
       <div className="flex items-start gap-3 flex-1 min-w-0">
         <button

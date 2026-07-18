@@ -49,10 +49,9 @@ export function useTasks() {
   const addTask = async (data: TaskFormData) => {
     const validationResult = TaskSchema.safeParse(data);
     if (!validationResult.success) {
-      console.error("Validation failed:", validationResult.error.format());
+      console.error("Validation failed:", validationResult.error.issues);
       return;
     }
-
     if (!API_URL) return;
 
     const tempTask: Task = {
@@ -63,6 +62,7 @@ export function useTasks() {
       is_completed: false,
       due_date: validationResult.data.dueDate ?? null,
       category: validationResult.data.category ?? null,
+      order: tasks.length,
     };
 
     setTasks((prev) => [tempTask, ...prev]);
@@ -131,6 +131,35 @@ export function useTasks() {
     }
   };
 
+  const reorderTasks = async (reorderedFilteredTasks: Task[]) => {
+    setTasks((prevTasks) => {
+      const newOrderMap = new Map(
+        reorderedFilteredTasks.map((t, index) => [t.id, index]),
+      );
+
+      return prevTasks.map((task) => {
+        if (newOrderMap.has(task.id)) {
+          return { ...task, order: newOrderMap.get(task.id)! };
+        }
+        return task;
+      });
+    });
+
+    try {
+      await Promise.all(
+        reorderedFilteredTasks.map((task, index) =>
+          fetch(`${API_URL}/${task.id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ ...task, order: index }),
+          }),
+        ),
+      );
+    } catch (err) {
+      console.error("Error reordering tasks:", err);
+    }
+  };
+
   const filteredTasks = useMemo(() => {
     return tasks
       .filter((task) => {
@@ -152,7 +181,8 @@ export function useTasks() {
         if (sortBy === "priority-desc") {
           return b.priority - a.priority;
         }
-        return b.id - a.id;
+
+        return (a.order ?? 0) - (b.order ?? 0);
       });
   }, [tasks, filter, searchQuery, sortBy]);
 
@@ -173,5 +203,6 @@ export function useTasks() {
     addTask,
     toggleTask,
     deleteTask,
+    reorderTasks,
   };
 }
