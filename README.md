@@ -49,6 +49,13 @@ on the frontend, most of the Tailwind/CSS styling.
 **I handled:** implementing the feature logic myself based on approaches Claude suggested, UI/UX decisions,
 and reviewing, testing, and adjusting every part of the app before deploying.
 
+## ✅ Testing
+
+End-to-end tests (Playwright) cover all core features from the assignment:
+task creation, completion, deletion, search, status filtering, and priority
+sorting. Tests run against the live deployed app and clean up after
+themselves. CI runs them automatically on every push via GitHub Actions.
+
 ---
 
 ## 👤 Author
