@@ -143,7 +143,7 @@ export function TaskForm({ onAdd, isSubmitting }: TaskFormProps) {
         </div>
       )}
 
-      <Button className="btn-submit" type="submit" disabled={isSubmitting}>
+      <Button data-testid="submit-task" className="btn-submit" type="submit" disabled={isSubmitting}>
         {isSubmitting ? (
           "Adding..."
         ) : (

@@ -51,6 +51,7 @@ export function TaskItem({
     >
       <div className="flex items-start gap-3 flex-1 min-w-0">
         <button
+          data-testid="task-checkbox"
           onClick={() => onToggle(task)}
           className={`task-checkbox ${
             task.is_completed
@@ -98,6 +99,7 @@ export function TaskItem({
         </div>
       </div>
       <button
+        data-testid="delete-task"
         onClick={() => onDelete(task.id)}
         className="btn-delete"
         title="Delete task"
