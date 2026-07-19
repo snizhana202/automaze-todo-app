@@ -60,7 +60,7 @@ export function useTasks() {
       description: validationResult.data.description ?? null,
       priority: validationResult.data.priority,
       is_completed: false,
-      due_date: validationResult.data.dueDate ?? null,
+      due_date: validationResult.data.due_date ?? null,
       category: validationResult.data.category ?? null,
       order: tasks.length,
     };
