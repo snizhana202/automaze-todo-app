@@ -37,6 +37,18 @@ A fullstack task management application featuring a reactive frontend and a robu
     * Backend: Start the server using `uvicorn main:app --reload`.
     * Frontend: Start the development server using `npm run dev`.
 
+## 🤖 AI Workflow
+
+I used Claude (Anthropic) throughout this project as a coding collaborator,
+especially for the backend, since this was my first time working with Python.
+
+**AI helped with:** overall project structure, the Python/FastAPI backend
+(API design, database schema with SQLAlchemy), initial component scaffolding
+on the frontend, most of the Tailwind/CSS styling.
+
+**I handled:** implementing the feature logic myself based on approaches Claude suggested, UI/UX decisions,
+and reviewing, testing, and adjusting every part of the app before deploying.
+
 ---
 
 ## 👤 Author
