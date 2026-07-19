@@ -16,7 +16,7 @@ export const TaskSchema = z.object({
       message: "Description cannot consist only of special characters.",
     }),
   priority: z.number().min(1).max(10),
-  dueDate: z.string().nullable().optional(),
+  due_date: z.string().nullable().optional(),
   category: z.string().nullable().optional(),
 });
 
