@@ -44,4 +44,3 @@ A fullstack task management application featuring a reactive frontend and a robu
 **Snizhana**
 * **GitHub:** [snizhana202](https://github.com/snizhana202)
 * **Live Demo:** [automaze-todo-app.vercel.app](https://automaze-todo-app.vercel.app/)
-* *Note: This project marks my transition from a Node.js to a Python/FastAPI backend ecosystem.*
