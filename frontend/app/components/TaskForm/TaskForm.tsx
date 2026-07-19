@@ -100,9 +100,9 @@ export function TaskForm({ onAdd, isSubmitting }: TaskFormProps) {
             <SelectTrigger className="select-priority w-full">
               <SelectValue placeholder="None" />
             </SelectTrigger>
-            <SelectContent 
-            className="bg-slate-950 border-slate-700 text-slate-200 min-w-0"
-            alignItemWithTrigger={false}
+            <SelectContent
+              className="bg-slate-950 border-slate-700 text-slate-200 min-w-0"
+              alignItemWithTrigger={false}
             >
               {CATEGORIES.map((cat) => (
                 <SelectItem key={cat} value={cat}>
@@ -124,9 +124,9 @@ export function TaskForm({ onAdd, isSubmitting }: TaskFormProps) {
           <SelectTrigger className="select-priority w-[180px]">
             <SelectValue placeholder="5" />
           </SelectTrigger>
-          <SelectContent 
-          className="bg-slate-950 border-slate-700 text-slate-200 min-w-0" 
-          alignItemWithTrigger={false}
+          <SelectContent
+            className="bg-slate-950 border-slate-700 text-slate-200 min-w-0"
+            alignItemWithTrigger={false}
           >
             {Array.from({ length: 10 }, (_, i) => i + 1).map((val) => (
               <SelectItem key={val} value={val.toString()}>

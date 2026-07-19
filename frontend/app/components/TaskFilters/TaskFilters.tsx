@@ -1,4 +1,11 @@
-import { Input, Select } from "../UI/UI";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { ArrowUpDown, ArrowUp, ArrowDown, Search } from "lucide-react";
 
 export type SortOption = "newest" | "oldest" | "priority-asc" | "priority-desc";
@@ -11,6 +18,8 @@ interface TaskFiltersProps {
   sortBy: SortOption;
   setSortBy: (val: SortOption) => void;
 }
+
+const FILTERS = ["all", "active", "completed"] as const;
 
 export function TaskFilters({
   searchQuery,
@@ -37,13 +46,13 @@ export function TaskFilters({
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="Search tasks..."
-          className="text-sm pl-9"
+          className="input-todo text-sm pl-9"
         />
       </div>
 
       <div className="flex justify-between items-center gap-4 text-xs">
         <div className="flex bg-slate-950 p-1 rounded-xl border border-slate-800">
-          {(["all", "active", "completed"] as const).map((f) => (
+          {FILTERS.map((f) => (
             <button
               key={f}
               onClick={() => setFilter(f)}
@@ -57,26 +66,19 @@ export function TaskFilters({
         <div className="flex items-center gap-2 bg-slate-900/50 px-2 py-1 rounded-lg border border-slate-800/60">
           {getSortIcon()}
           <span className="text-slate-400 font-medium">Sort:</span>
+
           <Select
             value={sortBy}
-            onChange={(e) => setSortBy(e.target.value as SortOption)}
-            className="text-xs py-1 px-1 bg-transparent border-none focus:ring-0 cursor-pointer text-slate-200 [color-scheme:dark]"
+            onValueChange={(val) => setSortBy(val as SortOption)}
           >
-            <option value="newest" className="bg-slate-900 text-slate-200">
-              Date (Newest)
-            </option>
-            <option
-              value="priority-asc"
-              className="bg-slate-900 text-slate-200"
-            >
-              Priority (1-10)
-            </option>
-            <option
-              value="priority-desc"
-              className="bg-slate-900 text-slate-200"
-            >
-              Priority (10-1)
-            </option>
+            <SelectTrigger className="w-[140px] h-8 bg-transparent border-none text-slate-200 focus-visible:ring-0">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent className="bg-slate-900 border-slate-700 text-slate-200">
+              <SelectItem value="newest">Date (Newest)</SelectItem>
+              <SelectItem value="priority-asc">Priority (1-10)</SelectItem>
+              <SelectItem value="priority-desc">Priority (10-1)</SelectItem>
+            </SelectContent>
           </Select>
         </div>
       </div>

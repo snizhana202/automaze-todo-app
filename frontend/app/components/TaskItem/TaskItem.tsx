@@ -47,7 +47,7 @@ export function TaskItem({
       style={style}
       {...attributes}
       {...listeners}
-      className={`task-card ${isDraggable ? "cursor-grab active:cursor-grabbing" : "cursor-default"}`}
+      className={`task-card ${task.is_completed ? "task-card-completed" : ""} ${isDraggable ? "cursor-grab active:cursor-grabbing" : "cursor-default"}`}
     >
       <div className="flex items-start gap-3 flex-1 min-w-0">
         <button
@@ -55,7 +55,7 @@ export function TaskItem({
           className={`task-checkbox ${
             task.is_completed
               ? "bg-emerald-500 border-emerald-500 text-slate-900"
-              : "border-slate-600 hover:border-indigo-400"
+              : "border-slate-600 hover:border-indigo-500"
           }`}
         >
           {task.is_completed && <Check className="w-3.5 h-3.5 stroke-[3]" />}
@@ -68,7 +68,7 @@ export function TaskItem({
               {task.title}
             </h3>
             {task.category && (
-              <span className="px-2 py-0.5 text-[9px] font-semibold bg-indigo-500/20 text-indigo-300 rounded-md border border-indigo-500/30">
+              <span className="badge font-semibold bg-indigo-500/20 text-indigo-300 border-indigo-500/30">
                 {task.category}
               </span>
             )}
@@ -81,9 +81,7 @@ export function TaskItem({
           )}
 
           <div className="flex items-center gap-3 flex-wrap mt-2">
-            <span
-              className={`px-2 py-0.5 text-[9px] font-bold rounded-full border ${priorityColor}`}
-            >
+            <span className={`badge font-bold rounded-full ${priorityColor}`}>
               Priority: {task.priority}
             </span>
 

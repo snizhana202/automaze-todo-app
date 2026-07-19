@@ -1,4 +1,5 @@
-import { Label, Input } from "../UI/UI";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 
 interface DatePickerProps {
   value: string;
@@ -6,22 +7,36 @@ interface DatePickerProps {
 }
 
 export function DatePicker({ value, onChange }: DatePickerProps) {
+  const formatted = value
+    ? new Date(value).toLocaleDateString("en-US")
+    : "mm/dd/yyyy";
+
   return (
     <div>
-      <Label>Due Date</Label>
-      <div className="relative flex items-center h-10 w-full rounded-xl border border-slate-800 bg-slate-950 focus-within:ring-2 focus-within:ring-indigo-500/50 transition-all">
+      <Label
+        htmlFor="due-date"
+        className="text-slate-400 font-medium mb-1.5 block"
+      >
+        Due Date
+      </Label>
+      <div className="input-todo relative flex items-center h-10 w-full focus-within:ring-2 focus-within:ring-indigo-500">
         <Input
+          id="due-date"
           type="date"
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          onClick={(e) => (e.target as HTMLInputElement).showPicker?.()}
-          className="absolute inset-0 w-full h-full opacity-0 z-0 cursor-pointer"
+          onClick={(e) => {
+            try {
+              (e.target as HTMLInputElement).showPicker?.();
+            } catch {}
+          }}
+          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
         />
-        <div className="absolute inset-0 flex items-center justify-between px-3 z-10 pointer-events-none">
+        <div className="absolute inset-0 flex items-center justify-between px-3 pointer-events-none">
           <span
             className={`text-sm ${value ? "text-slate-200" : "text-slate-500"}`}
           >
-            {value ? new Date(value).toLocaleDateString("en-US") : "dd-mm-yyyy"}
+            {formatted}
           </span>
           <svg
             className="w-4 h-4 text-slate-500"
