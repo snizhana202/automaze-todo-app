@@ -71,7 +71,7 @@ export function TaskFilters({
             value={sortBy}
             onValueChange={(val) => setSortBy(val as SortOption)}
           >
-            <SelectTrigger className="w-[140px] h-8 bg-transparent border-none text-slate-200 focus-visible:ring-0">
+            <SelectTrigger data-testid="sort-select" className="w-[140px] h-8 bg-transparent border-none text-slate-200 focus-visible:ring-0">
               <SelectValue />
             </SelectTrigger>
             <SelectContent className="bg-slate-900 border-slate-700 text-slate-200">

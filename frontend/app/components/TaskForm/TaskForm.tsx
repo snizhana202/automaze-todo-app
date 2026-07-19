@@ -97,7 +97,7 @@ export function TaskForm({ onAdd, isSubmitting }: TaskFormProps) {
         <div>
           <Label className={LABEL_STYLES}>Category</Label>
           <Select value={category ?? undefined} onValueChange={setCategory}>
-            <SelectTrigger className="select-priority w-full">
+            <SelectTrigger data-testid="category-select" className="select-priority w-full">
               <SelectValue placeholder="None" />
             </SelectTrigger>
             <SelectContent
@@ -121,7 +121,7 @@ export function TaskForm({ onAdd, isSubmitting }: TaskFormProps) {
           value={priority.toString()}
           onValueChange={(val) => setPriority(Number(val))}
         >
-          <SelectTrigger className="select-priority w-[180px]">
+          <SelectTrigger data-testid="priority-select" className="select-priority w-[180px]">
             <SelectValue placeholder="5" />
           </SelectTrigger>
           <SelectContent
